@@ -1,0 +1,1 @@
+This folder contains all Raspberry Pi related Solutions and things.
