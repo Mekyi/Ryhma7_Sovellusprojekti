@@ -15,12 +15,15 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
+using Emmellsoft.IoT.Rpi.SenseHat.Fonts.SingleColor;
 
 namespace IoTCore.RaspberrySenseHatApp
 {
     public sealed partial class MainPage : Page
     {
         public static volatile bool Closing;
+        TinyFont tinyFont = new TinyFont();
 
         public MainPage()
         {
@@ -51,15 +54,21 @@ namespace IoTCore.RaspberrySenseHatApp
                         senseHat.Sensors.HumiditySensor.Update();
                         senseHat.Sensors.PressureSensor.Update();
 
-                        senseHat.Display.Clear();
-                        senseHat.Display.Update();
-
                         var measurement = new Measurement()
                         {
                             Temperature = senseHat.Sensors.Temperature ?? 0,
                             Humidity = senseHat.Sensors.Humidity ?? 0,
                             Pressure = senseHat.Sensors.Pressure ?? 0,
                         };
+
+                        #region SenseHAT LED
+                        senseHat.Display.Clear();
+
+                        int temperature = (int)Math.Round(measurement.Temperature);
+                        string temperatureText = temperature.ToString();
+                        tinyFont.Write(senseHat.Display, temperatureText, Colors.Aqua);
+                        senseHat.Display.Update();
+                        #endregion
 
                         progress.Report(measurement);
 
