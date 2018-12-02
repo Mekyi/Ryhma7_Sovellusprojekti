@@ -56,7 +56,7 @@ namespace IoTCore.RaspberrySenseHatApp
 
                         var measurement = new Measurement()
                         {
-                            Temperature = senseHat.Sensors.Temperature ?? 0,
+                            Temperature = (senseHat.Sensors.Temperature ?? 0) -12.5,
                             Humidity = senseHat.Sensors.Humidity ?? 0,
                             Pressure = senseHat.Sensors.Pressure ?? 0,
                         };
@@ -67,12 +67,21 @@ namespace IoTCore.RaspberrySenseHatApp
                         int temperature = (int)Math.Round(measurement.Temperature);
                         string temperatureText = temperature.ToString();
                         tinyFont.Write(senseHat.Display, temperatureText, Colors.Aqua);
+
+                        senseHat.Display.Screen[2, 5] = Colors.Orange;
+
+                        senseHat.Display.Screen[4, 5] = Colors.Orange;
+                        senseHat.Display.Screen[5, 5] = Colors.Orange;
+                        senseHat.Display.Screen[4, 6] = Colors.Orange;
+                        senseHat.Display.Screen[4, 7] = Colors.Orange;
+                        senseHat.Display.Screen[5, 7] = Colors.Orange;
+
                         senseHat.Display.Update();
                         #endregion
 
                         progress.Report(measurement);
 
-                        await AzureIoTHub.SendDeviceToCloudMessageAsync(measurement);
+                        //await AzureIoTHub.SendDeviceToCloudMessageAsync(measurement);
                     }
                     catch (Exception e)
                     {
